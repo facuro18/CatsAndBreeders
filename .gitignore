@@ -1,0 +1,9 @@
+node_modules/
+
+mysql/
+
+.env*
+
+dist/
+
+package-lock.json
