@@ -1,15 +1,16 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CatController } from './cat.controller';
 
 import { DatabaseModule } from '@modules/database/database.module';
 
 import { catRepositoryProvider } from './repositories/typeorm/cat.repository.provider';
+import { BreedModule } from '@modules/breed/breed.module';
 
 @Module({
-  imports: [DatabaseModule], // ? Is this even needed
+  imports: [DatabaseModule, forwardRef(() => BreedModule)],
   controllers: [CatController],
-  providers: [catRepositoryProvider, CatService], //? Why is it a provider
+  providers: [catRepositoryProvider, CatService],
   exports: [CatService], //? Difference with providers?
 })
 export class CatModule {}

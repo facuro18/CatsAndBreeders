@@ -9,12 +9,12 @@ export const typeOrmDBProvider = {
     try {
       const dataSource = new DataSource({
         type: 'mysql',
-        host: configService.get('DATABASE_HOST'),
-        port: configService.get('DATABASE_PORT'),
-        username: configService.get('DATABASE_USER'),
-        password: configService.get('DATABASE_PASSWORD'),
-        database: configService.get('DATABASE_SCHEMA'),
-        synchronize: false,
+        host: configService.get('db_host'),
+        port: configService.get('db_port'),
+        username: configService.get('db_user'),
+        password: configService.get('db_password'),
+        database: configService.get('db_schema'),
+        synchronize: true,
         entities: [`${__dirname}/../**/models/**.model{.ts,.js}`], // this will automatically load all entity files in the src folder
         logging: ['query', 'error'],
       });

@@ -1,4 +1,4 @@
-import { CreateCatDto, UpdateCatDto } from '../dtos';
+import { UpdateCatDto } from '../dtos';
 import { CatEntity } from '../entities/cat.entity';
 
 export interface ICatRepository {
@@ -6,9 +6,9 @@ export interface ICatRepository {
 
   findById(id: number): Promise<CatEntity | null>;
 
-  store(cat: CreateCatDto): Promise<CatEntity>;
+  store(cat: CatEntity): Promise<CatEntity>;
 
-  updateOne(id: number, updateCatDto: UpdateCatDto): Promise<CatEntity | undefined>;
+  updateOne(id: number, updateCatDto: UpdateCatDto): Promise<CatEntity | null>;
 
-  destroy(id: number): Promise<void>;
+  destroy(id: number): Promise<boolean>;
 }

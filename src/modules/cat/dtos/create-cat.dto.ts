@@ -1,14 +1,18 @@
-import { IsInt, IsPositive, IsString, MaxLength, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsPositive, IsString, MinLength } from 'class-validator';
 
 export class CreateCatDto {
   @IsString()
   @MinLength(1)
+  @ApiProperty()
   public name: string;
   @IsInt()
   @IsPositive()
+  @ApiProperty()
   public age: number;
-  @IsString()
-  @MinLength(1)
-  @MaxLength(50)
-  public breed: string;
+
+  @IsInt()
+  @IsPositive()
+  @ApiProperty()
+  public breedId: number;
 }

@@ -1,4 +1,16 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateCatDto } from './create-cat.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsOptional, IsPositive, IsString, MinLength } from 'class-validator';
 
-export class UpdateCatDto extends PartialType(CreateCatDto) {}
+export class UpdateCatDto {
+  @IsString()
+  @MinLength(1)
+  @IsOptional()
+  @ApiProperty()
+  public name?: string;
+
+  @IsInt()
+  @IsPositive()
+  @IsOptional()
+  @ApiProperty()
+  public age?: number;
+}

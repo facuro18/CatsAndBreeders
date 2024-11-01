@@ -1,35 +1,48 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CatService } from './cat.service';
-import { CreateCatDto, UpdateCatDto } from './dtos';
+import { CatDto, CreateCatDto, UpdateCatDto } from './dtos';
 import { CatEntity } from './entities/cat.entity';
+import { toDtoFromCat } from './mappers/index';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('cats')
+@ApiTags('Cats')
 export class CatController {
-  constructor(private readonly catsService: CatService) {}
+  constructor(private readonly catService: CatService) {}
 
   @Post()
-  create(@Body() createCatDto: CreateCatDto) {
-    return this.catsService.create(createCatDto);
+  @ApiResponse({ type: CatEntity, status: 201 })
+  create(@Body() createCatDto: CreateCatDto): Promise<CatEntity> {
+    return this.catService.create(createCatDto);
   }
 
   @Get()
-  findAll(): Promise<CatEntity[]> {
-    return this.catsService.findAll();
+  @ApiResponse({ type: CatDto, status: 200, isArray: true })
+  async findAll(): Promise<CatDto[]> {
+    const cats: CatEntity[] = await this.catService.findAll();
+    const catsMapped: CatDto[] = cats.map((cat) => toDtoFromCat(cat));
+    return catsMapped;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.catsService.findById(+id);
+  @ApiResponse({ type: CatDto, status: 200 })
+  async findOne(@Param('id') id: number): Promise<CatDto> {
+    const cat: CatEntity = await this.catService.findById(+id);
+    return toDtoFromCat(cat);
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateCatDto: UpdateCatDto) {
-    return this.catsService.update(+id, updateCatDto);
+  @ApiResponse({ type: CatDto, status: 200 })
+  async update(@Param('id') id: number, @Body() updateCatDto: UpdateCatDto): Promise<CatDto> {
+    const updatedCat: CatEntity = await this.catService.update(+id, updateCatDto);
+    return toDtoFromCat(updatedCat);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.catsService.delete(+id);
+  @ApiResponse({ type: String, status: 200 })
+  async remove(@Param('id') id: number): Promise<string> {
+    await this.catService.delete(+id);
+    return 'Cat deleted successfully';
   }
 }
 
