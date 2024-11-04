@@ -1,6 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { errors } from './errors.config';
+import { errors } from '../constants/errors.config';
 
 @Catch() // Este decorador sin parámetros captura cualquier error
 export class HttpExceptionFilter implements ExceptionFilter {

@@ -1,14 +1,13 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { BreedService } from './breed.service';
 import { BreedController } from './breed.controller';
-import { DatabaseModule } from '@modules/database/database.module';
-import { breedRepositoryProvider } from './repositories/typeorm/breed.repository.provider';
-import { CatModule } from '@modules/cat/cat.module';
+import { BreedRepository } from './repositories/breed.repository';
+import { BreedRepositoryImpl } from './repositories/breed.repository.impl';
 
 @Module({
-  imports: [DatabaseModule, forwardRef(() => CatModule)],
+  imports: [],
   controllers: [BreedController],
-  providers: [breedRepositoryProvider, BreedService],
-  exports: [BreedService],
+  providers: [BreedService, { provide: BreedRepository, useClass: BreedRepositoryImpl }],
+  exports: [],
 })
 export class BreedModule {}

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CatDto, CreateCatDto, UpdateCatDto } from './dtos';
 import { CatEntity } from './entities/cat.entity';
@@ -19,29 +19,32 @@ export class CatController {
   @Get()
   @ApiResponse({ type: CatDto, status: 200, isArray: true })
   async findAll(): Promise<CatDto[]> {
-    const cats: CatEntity[] = await this.catService.findAll();
-    const catsMapped: CatDto[] = cats.map((cat) => toDtoFromCat(cat));
+    const cats = await this.catService.findAll();
+    console.log(cats);
+    const catsMapped = cats.map((cat) => toDtoFromCat(cat));
+    console.log(catsMapped);
+
     return catsMapped;
   }
 
   @Get(':id')
   @ApiResponse({ type: CatDto, status: 200 })
-  async findOne(@Param('id') id: number): Promise<CatDto> {
-    const cat: CatEntity = await this.catService.findById(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<CatDto> {
+    const cat = await this.catService.findById(id);
     return toDtoFromCat(cat);
   }
 
   @Patch(':id')
   @ApiResponse({ type: CatDto, status: 200 })
-  async update(@Param('id') id: number, @Body() updateCatDto: UpdateCatDto): Promise<CatDto> {
-    const updatedCat: CatEntity = await this.catService.update(+id, updateCatDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateCatDto: UpdateCatDto): Promise<CatDto> {
+    const updatedCat = await this.catService.update(id, updateCatDto);
     return toDtoFromCat(updatedCat);
   }
 
   @Delete(':id')
   @ApiResponse({ type: String, status: 200 })
-  async remove(@Param('id') id: number): Promise<string> {
-    await this.catService.delete(+id);
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<string> {
+    await this.catService.delete(id);
     return 'Cat deleted successfully';
   }
 }

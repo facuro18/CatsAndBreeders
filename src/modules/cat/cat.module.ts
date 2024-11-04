@@ -1,16 +1,16 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CatController } from './cat.controller';
 
-import { DatabaseModule } from '@modules/database/database.module';
+import { CatRepository } from './repositories/cat.repository';
+import { CatRepositoryImpl } from './repositories/cat.repository.impl';
 
-import { catRepositoryProvider } from './repositories/typeorm/cat.repository.provider';
-import { BreedModule } from '@modules/breed/breed.module';
+//, forwardRef(() => BreedModule) Circular dependencies
 
 @Module({
-  imports: [DatabaseModule, forwardRef(() => BreedModule)],
+  imports: [],
   controllers: [CatController],
-  providers: [catRepositoryProvider, CatService],
-  exports: [CatService], //? Difference with providers?
+  providers: [CatService, { provide: CatRepository, useClass: CatRepositoryImpl }],
+  exports: [],
 })
 export class CatModule {}

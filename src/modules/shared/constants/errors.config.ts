@@ -7,4 +7,5 @@ export const errors = {
     error: 'Requesst Conflict',
   },
   serverError: { statusCode: 500, message: 'An unexpected error occurred', error: 'Server Error' },
+  unauthorizedReq: { statusCode: 401, message: 'Access not allowed', error: 'Unauthorized Exception' },
 } as const;

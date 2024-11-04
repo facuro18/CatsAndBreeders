@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BreedService } from './breed.service';
 import { BreedEntity } from './entities/breed.entity';
@@ -19,29 +19,31 @@ export class BreedController {
   @Get()
   @ApiResponse({ type: BreedDto, status: 200, isArray: true })
   async findAll(): Promise<BreedDto[]> {
-    const breeds: BreedEntity[] = await this.breedService.findAll();
-    const breedsMapped: BreedDto[] = breeds.map((breed) => toDtoFromBreed(breed));
+    const breeds = await this.breedService.findAll();
+    console.log(breeds);
+    const breedsMapped = breeds.map((breed) => toDtoFromBreed(breed));
+    console.log(breedsMapped);
     return breedsMapped;
   }
 
   @Get(':id')
   @ApiResponse({ type: BreedDto, status: 200 })
-  async findOne(@Param('id') id: number): Promise<BreedDto> {
-    const breed: BreedEntity = await this.breedService.findById(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<BreedDto> {
+    const breed = await this.breedService.findById(id);
     return toDtoFromBreed(breed);
   }
 
   @Patch(':id')
   @ApiResponse({ type: BreedDto, status: 200 })
-  async update(@Param('id') id: number, @Body() updateBreedDto: UpdateBreedDto): Promise<BreedDto> {
-    const updatedBreed: BreedEntity = await this.breedService.update(+id, updateBreedDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateBreedDto: UpdateBreedDto): Promise<BreedDto> {
+    const updatedBreed = await this.breedService.update(id, updateBreedDto);
     return toDtoFromBreed(updatedBreed);
   }
 
   @Delete(':id')
   @ApiResponse({ type: String, status: 200 })
-  async remove(@Param('id') id: number): Promise<string> {
-    await this.breedService.delete(+id);
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<string> {
+    await this.breedService.delete(id);
     return 'Breed deleted successfully';
   }
 }

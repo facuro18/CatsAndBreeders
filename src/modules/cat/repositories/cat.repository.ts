@@ -1,14 +1,14 @@
 import { UpdateCatDto } from '../dtos';
 import { CatEntity } from '../entities/cat.entity';
 
-export interface ICatRepository {
-  findAll: () => Promise<CatEntity[]>;
+export abstract class CatRepository {
+  abstract findAll: () => Promise<CatEntity[]>;
 
-  findById(id: number): Promise<CatEntity | null>;
+  abstract findById(id: number): Promise<CatEntity | null>;
 
-  store(cat: CatEntity): Promise<CatEntity>;
+  abstract store(cat: CatEntity): Promise<CatEntity>;
 
-  updateOne(id: number, updateCatDto: UpdateCatDto): Promise<CatEntity | null>;
+  abstract updateOne(id: number, updateCatDto: UpdateCatDto): Promise<CatEntity | null>;
 
-  destroy(id: number): Promise<boolean>;
+  abstract destroy(id: number): Promise<boolean>;
 }

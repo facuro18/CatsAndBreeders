@@ -8,7 +8,7 @@ export function toDtoFromCat(catEntity: CatEntity): CatDto {
     id: catEntity.id,
     name: catEntity.name,
     age: catEntity.age,
-    breedId: catEntity.breedId,
+    breedId: catEntity.breedId ?? null,
     breed: catEntity.breed ? toDtoFromBreed(catEntity.breed) : null,
   });
 }
