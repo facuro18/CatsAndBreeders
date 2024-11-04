@@ -20,6 +20,8 @@ NODE_ENV: The environment in which the application is running (e.g., development
 
 PORT: The port on which the application will run.
 
+SECRET_JWT_AUTHENTICATION: Secret to manage Local authentication
+
 DATABASE_HOST: The host of the database (e.g., localhost).
 
 DATABASE_PORT: The port on which the database is listening.
